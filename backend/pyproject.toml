@@ -1,0 +1,15 @@
+[project]
+name = "omega-hackathon"
+version = "1.0.0"
+description = "Sellable waste-network modules for HACQUIRE 2026"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["modules", "platform", "apps"]
+testpaths = ["modules", "platform", "apps"]
+python_files = ["test_*.py"]
+addopts = "-q"

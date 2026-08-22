@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanCarbonTracks</title>
+
+  <!-- ✅ Load Tailwind CDN first -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- ✅ Then customize it -->
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#16a34a',
+        },
+      },
+    },
+  }
+</script>
+
+  <!-- Optional custom styles -->
+  <link rel="stylesheet" href="style.css">
+  </head>
+  
+  <body class="text-gray-800" style="background: url('https://i.ibb.co/1Yr43kdm/100-Light-Backgrounds.jpg') no-repeat center center fixed; background-size: cover;">
+
+  <!-- Header Section -->
+  <header class="bg-green-600 text-white text-center py-8 shadow-md">
+    <h1 class="text-3xl font-bold">CleanCarbonTracks</h1>
+    <p class="text-lg mt-2">Helping India preserve its Incredible</p>
+  </header>
+
+  <!-- Resident Portal -->
+  <section class="p-6 max-w-4xl mx-auto">
+    <h2 class="text-2xl font-semibold text-green-700 mb-4">Resident Login:</h2>
+
+    <form class="bg-white p-6 rounded-2xl shadow-md">
+      <label class="block mb-2">Name:</label>
+      <input type="text" class="w-full p-2 border rounded mb-4" placeholder="Enter your name">
+
+      <label class="block mb-2">Address:</label>
+      <input type="text" class="w-full p-2 border rounded mb-4" placeholder="Your address">
+
+      <label class="block mb-2">Waste Type:</label>
+      <select class="w-full p-2 border rounded mb-4">
+        <option>Plastic</option>
+        <option>Organic</option>
+        <option>Paper</option>
+        <option>Metal</option>
+      </select>
+
+      <button type="button" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        Book Pickup
+      </button>
+
+      <p id="instruction" class="mt-3 text-sm text-gray-600 italic hidden"></p>
+      
+      <p id="message" class="text-green-600 mt-3 font-medium hidden">✅ Pickup booked successfully!</p>
+    </form>
+  </section>
+
+  <!-- Smart Waste Categorizer -->
+<section class="p-6 bg-white max-w-4xl mx-auto mt-6 rounded-2xl shadow-md">
+  <h2 class="text-2xl font-semibold text-green-700 mb-4">Smart Waste Categorizer</h2>
+
+  <label for="wasteInput" class="block mb-2 font-medium">Enter or select an item:</label>
+  <input id="wasteInput" type="text" class="w-full p-2 border rounded mb-4" placeholder="e.g., Banana peel, Plastic bottle">
+
+  <button onclick="categorizeWaste()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+    Categorize
+  </button>
+
+  <p id="wasteResult" class="mt-4 text-lg font-semibold text-green-700 hidden"></p>
+</section>
+
+
+  <!-- Fleet Tracking -->
+  <section class="p-6 bg-white max-w-4xl mx-auto mt-6 rounded-2xl shadow-md">
+    <h2 class="text-2xl font-semibold text-green-700 mb-4">Fleet Tracking & Route Optimization</h2>
+    <img src="https://i.ibb.co/WLNcrLs/Screenshot-2025-10-25-125015.png"
+         alt="Map simulation" class="w-1/2 mx-auto mb-3">
+    <p class="text-center text-gray-600">Optimized route saved <span class="font-bold text-green-600">15%</span> fuel and <span class="font-bold text-green-600">20%</span> time.</p>
+  </section>
+
+  <!-- Analytics Section -->
+  <section class="p-6 max-w-4xl mx-auto mt-6">
+    <h2 class="text-2xl font-semibold text-green-700 mb-4">Analytics & Reporting</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white p-4 rounded-2xl shadow-md text-center">
+        <h3 class="text-lg font-semibold">Pickups this week</h3>
+        <p class="text-2xl text-green-600 font-bold">124</p>
+      </div>
+      <div class="bg-white p-4 rounded-2xl shadow-md text-center">
+        <h3 class="text-lg font-semibold">Waste Diverted</h3>
+        <p class="text-2xl text-green-600 font-bold">68%</p>
+      </div>
+      <div class="bg-white p-4 rounded-2xl shadow-md text-center">
+        <h3 class="text-lg font-semibold">CO₂ Saved</h3>
+        <p class="text-2xl text-green-600 font-bold">42 kg</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Know Your Waste Section -->
+<section class="p-6 bg-white max-w-4xl mx-auto mt-6 rounded-2xl shadow-md">
+  <h2 class="text-2xl font-semibold text-green-700 mb-4">Know Your Waste</h2>
+  <select id="wasteItem" class="w-full p-2 border rounded mb-4">
+    <option>Select an item</option>
+    <option>Plastic Bottle</option>
+    <option>Food Waste</option>
+    <option>Cardboard Box</option>
+    <option>Old Battery</option>
+  </select>
+  <p id="wasteTip" class="text-gray-700 font-medium"></p>
+</section>
+ 
+ <script>
+  const wasteTips = {
+    "Plastic Bottle": "Recycle it in the plastic bin. Avoid burning — it releases harmful gases.",
+    "Food Waste": "Compost if possible! Helps reduce landfill waste and create natural fertilizer.",
+    "Cardboard Box": "Flatten and recycle it with paper waste.",
+    "Old Battery": "Do NOT throw in regular bins — dispose at e-waste collection centers."
+  };
+
+  document.getElementById('wasteItem').addEventListener('change', function() {
+    const selected = this.value;
+    const tip = wasteTips[selected] || '';
+    document.getElementById('wasteTip').textContent = tip;
+  });
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

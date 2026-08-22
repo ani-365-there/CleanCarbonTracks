@@ -1,0 +1,118 @@
+import { PickupRequest, Complaint, Vehicle, AnalyticsMetrics } from './types';
+
+export let mockPickups: PickupRequest[] = [
+  {
+    id: 'PK-1001',
+    name: 'Aarav Sharma',
+    address: 'Flat 402, Green Glen Layout, Outer Ring Rd, Bengaluru',
+    wasteType: 'plastic',
+    preferredDate: '2026-08-22',
+    notes: '2 big bags of segregated clean plastic containers',
+    status: 'scheduled',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'PK-1002',
+    name: 'Priya Mukherjee',
+    address: 'B-12, Sector 5, Salt Lake, Kolkata',
+    wasteType: 'organic',
+    preferredDate: '2026-08-21',
+    notes: 'Kitchen wet waste compost feedstock',
+    status: 'in_progress',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'PK-1003',
+    name: 'Rohan Deshmukh',
+    address: '14/B Kalyani Nagar, Pune',
+    wasteType: 'e-waste',
+    preferredDate: '2026-08-23',
+    notes: 'Old printer and dead lithium batteries',
+    status: 'scheduled',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'PK-1004',
+    name: 'Sneha Patel',
+    address: 'Block C, Vastrapur, Ahmedabad',
+    wasteType: 'paper',
+    preferredDate: '2026-08-20',
+    notes: 'Stack of cardboard packaging cartons',
+    status: 'completed',
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
+  },
+];
+
+export let mockComplaints: Complaint[] = [
+  {
+    id: 'CMP-201',
+    name: 'Vikram Mehta',
+    address: 'Plot 88, Jubilee Hills, Hyderabad',
+    issueType: 'missed_pickup',
+    description: 'Scheduled morning pickup at 8:00 AM was not fulfilled.',
+    status: 'investigating',
+    createdAt: new Date(Date.now() - 3600000).toISOString(),
+  },
+  {
+    id: 'CMP-202',
+    name: 'Ananya Roy',
+    address: 'Park Street Cross 3, Kolkata',
+    issueType: 'overflowing_bin',
+    description: 'Community wet waste bin overflowing onto the pedestrian pathway.',
+    status: 'open',
+    createdAt: new Date(Date.now() - 7200000).toISOString(),
+  },
+];
+
+export let mockVehicles: Vehicle[] = [
+  {
+    id: 'VEH-01',
+    code: 'TRUCK-KA-05-9214',
+    driverName: 'Ramesh Kumar',
+    zone: 'Zone 1 - North Sector',
+    status: 'active',
+    batteryOrFuelPercent: 82,
+    currentStopsCompleted: 14,
+    totalStops: 20,
+    lat: 12.9716,
+    lng: 77.5946,
+    fuelSavedPercent: 15,
+    timeSavedPercent: 20,
+  },
+  {
+    id: 'VEH-02',
+    code: 'TRUCK-MH-12-4411',
+    driverName: 'Suresh Patil',
+    zone: 'Zone 2 - East Residential',
+    status: 'en_route',
+    batteryOrFuelPercent: 68,
+    currentStopsCompleted: 9,
+    totalStops: 18,
+    lat: 18.5204,
+    lng: 73.8567,
+    fuelSavedPercent: 18,
+    timeSavedPercent: 22,
+  },
+  {
+    id: 'VEH-03',
+    code: 'TRUCK-DL-01-3829',
+    driverName: 'Mohan Singh',
+    zone: 'Zone 3 - Commercial Hub',
+    status: 'idle',
+    batteryOrFuelPercent: 95,
+    currentStopsCompleted: 22,
+    totalStops: 22,
+    lat: 28.6139,
+    lng: 77.209,
+    fuelSavedPercent: 14,
+    timeSavedPercent: 19,
+  },
+];
+
+export let mockAnalytics: AnalyticsMetrics = {
+  pickupsThisWeek: 128,
+  wasteDivertedPercentage: 71,
+  co2SavedKg: 46.5,
+  activeVehicles: 6,
+  resolvedComplaints: 34,
+};

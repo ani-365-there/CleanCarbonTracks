@@ -1,0 +1,16 @@
+{
+  "name": "cleancarbon-intelligent-waste-system",
+  "version": "1.0.0",
+  "description": "Unified CleanCarbonTracks Frontend and Intelligent Waste Collection Backend System",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -p \"[{name}]\" -c \"cyan,yellow\" -n \"backend,frontend\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && python run_web.py",
+    "build:frontend": "cd frontend && npm run build",
+    "test:backend": "cd backend && pytest"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

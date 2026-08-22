@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Report a bin · Binflow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Syne:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/ui/css/app.css" />
+</head>
+<body>
+  <main class="phone">
+    <div class="brand"><a href="/" style="color:inherit;text-decoration:none"><b>BINFLOW</b></a><span id="who">resident</span></div>
+    <h1>Overflow?</h1>
+    <p class="lede">Snap the bin, tag the waste, we grab your location.</p>
+
+    <div class="camera" id="cameraBox">
+      <div class="placeholder" id="camHint">Tap to open camera</div>
+      <img id="preview" alt="" hidden />
+      <span class="shutter"></span>
+      <input id="photo" type="file" accept="image/*" capture="environment" />
+    </div>
+
+    <div class="pills">
+      <button class="pill" data-cat="wet" type="button">Wet</button>
+      <button class="pill" data-cat="dry" type="button">Dry</button>
+      <button class="pill" data-cat="mixed" type="button">Mixed</button>
+    </div>
+
+    <div class="loc">
+      <span>Device location</span>
+      <b id="locLabel">capturing…</b>
+    </div>
+    <textarea id="notes" rows="2" placeholder="Optional note (hostel, mess, locked area)"></textarea>
+    <button class="btn primary" id="submit" type="button" disabled>Submit report</button>
+    <div id="msg"></div>
+
+    <section>
+      <h2>Bins you reported</h2>
+      <div class="list" id="list"></div>
+    </section>
+  </main>
+  <script src="/ui/js/common.js"></script>
+  <script src="/ui/js/citizen.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+/* 🌿 General page style enhancements */
+/* 🌄 Background image with blur and overlay */
+body {
+  background: url('https://i.ibb.co/d4mhQpzC/images-1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: white !important;
+}
+
+body {
+  background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://i.ibb.co/d4mhQpzC/images-1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  font-family: 'Inter', sans-serif;
+  scroll-behavior: smooth;
+  min-height: 100vh;
+}
+
+/* 🌈 Soft gradient for the header */
+header {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+}
+
+/* 🖱️ Subtle hover animation for cards */
+section div.bg-white:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* 🌟 Highlight the green text */
+.text-green-700 {
+  color: #15803d;
+}
+
+/* 💫 Smooth fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+section {
+  animation: fadeIn 0.6s ease;
+}
+
+/* 🪄 Optional: make buttons glow slightly on hover */
+button:hover {
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+/* ♻️ Smart Waste Categorizer styling */
+#wasteInput {
+  border: 2px solid #22c55e;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+#wasteInput:focus {
+  border-color: #16a34a;
+  box-shadow: 0 0 5px rgba(22, 163, 74, 0.4);
+}
+
+#wasteResult {
+  transition: opacity 0.3s ease;
+}
+
+

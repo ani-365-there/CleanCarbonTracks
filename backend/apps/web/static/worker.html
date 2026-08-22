@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Collector · Binflow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Syne:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/ui/css/app.css" />
+</head>
+<body>
+  <main class="phone">
+    <div class="brand"><a href="/" style="color:inherit;text-decoration:none"><b>BINFLOW</b></a><span id="who">collector</span></div>
+    <h1>On the run</h1>
+    <p class="lede">Go on duty and the nearest overflowing bin is assigned to you.</p>
+
+    <div class="card toggle">
+      <div>
+        <strong id="dutyLabel">Off duty</strong>
+        <small class="hint" id="dutyHint">Location needed to auto-assign</small>
+      </div>
+      <button class="switch" id="duty" type="button" aria-pressed="false"><i></i></button>
+    </div>
+
+    <div class="stats">
+      <div class="card stat"><em id="pendingCount">0</em> pending</div>
+      <div class="card stat"><em id="doneCount">0</em> collected</div>
+    </div>
+
+    <section>
+      <h2>Assigned work</h2>
+      <div class="list" id="pending"></div>
+    </section>
+    <section>
+      <h2>Done</h2>
+      <div class="list" id="done"></div>
+    </section>
+    <div id="msg"></div>
+  </main>
+  <script src="/ui/js/common.js"></script>
+  <script src="/ui/js/worker.js"></script>
+</body>
+</html>
