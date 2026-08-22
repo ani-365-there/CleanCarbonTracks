@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Calendar, User, MapPin, Sparkles, CheckCircle2, AlertCircle, Clock, Info } from 'lucide-react';
 import { WasteType, PickupRequest } from '@/lib/types';
+import { submitPickupRequest } from '@/lib/api';
 
 interface PickupBookingFormProps {
   onPickupCreated?: (pickup: PickupRequest) => void;
@@ -74,22 +75,7 @@ export const PickupBookingForm: React.FC<PickupBookingFormProps> = ({ onPickupCr
     setIsSubmitting(true);
 
     try {
-      let res = await fetch('/api/backend/pickups', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res.ok) {
-        res = await fetch('/api/pickups', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        });
-      }
-
-      if (!res.ok) throw new Error('Failed to book pickup');
-      const newPickup: PickupRequest = await res.json();
+      const newPickup: PickupRequest = await submitPickupRequest(formData);
       setSubmittedBooking(newPickup);
       if (onPickupCreated) onPickupCreated(newPickup);
     } catch {

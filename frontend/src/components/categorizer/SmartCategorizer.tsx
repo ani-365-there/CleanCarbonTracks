@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Search, Sparkles, AlertCircle, CheckCircle, Flame, Leaf, HelpCircle, ArrowRight } from 'lucide-react';
 import { categorizeItem } from '@/lib/wasteRules';
+import { categorizeWasteItem } from '@/lib/api';
 import { WasteItemRule } from '@/lib/types';
 
 export const SmartCategorizer: React.FC = () => {
@@ -27,21 +28,15 @@ export const SmartCategorizer: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`/api/backend/categorize?item=${encodeURIComponent(textToSearch)}`);
-      if (response.ok) {
-        const data = await response.json();
-        setResult({
-          keywords: data.classification?.top?.matched || [],
-          category: data.category,
-          type: data.type,
-          binColor: data.binColor,
-          tip: data.tip,
-          co2SavingsKgPerKg: data.co2SavingsKgPerKg,
-        });
-      } else {
-        const fallback = categorizeItem(textToSearch);
-        setResult(fallback);
-      }
+      const data = await categorizeWasteItem(textToSearch);
+      setResult({
+        keywords: data.classification?.top?.matched || [],
+        category: data.category,
+        type: data.type,
+        binColor: data.binColor,
+        tip: data.tip,
+        co2SavingsKgPerKg: data.co2SavingsKgPerKg,
+      });
     } catch (err) {
       const fallback = categorizeItem(textToSearch);
       setResult(fallback);
