@@ -17,7 +17,14 @@ from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from waste_network import create_waste_network
 from image_classifier.classifier import ImageClassifier, WASTE_CAMPUS_TAXONOMY
-from translator import translator, SUPPORTED_LANGUAGES
+try:
+    from vernacular_wrapper.translator import translator, SUPPORTED_LANGUAGES
+except Exception:
+    try:
+        from translator import translator, SUPPORTED_LANGUAGES
+    except Exception:
+        translator = None
+        SUPPORTED_LANGUAGES = {"en": "English"}
 
 STATIC = Path(__file__).parent / "static"
 MIME_MAP = {

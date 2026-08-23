@@ -8,9 +8,11 @@ import os
 import re
 import json
 from typing import Dict, Any, List, Optional
-from dotenv import load_dotenv
-
-load_dotenv()
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    pass
 
 SUPPORTED_LANGUAGES: Dict[str, str] = {
     "en": "English",
