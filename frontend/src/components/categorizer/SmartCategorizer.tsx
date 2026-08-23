@@ -6,9 +6,13 @@ import { categorizeItem } from '@/lib/wasteRules';
 import { categorizeWasteItem } from '@/lib/api';
 import { WasteItemRule } from '@/lib/types';
 
-export const SmartCategorizer: React.FC = () => {
+interface SmartCategorizerProps {
+  selectedLang?: string;
+}
+
+export const SmartCategorizer: React.FC<SmartCategorizerProps> = ({ selectedLang = 'en' }) => {
   const [query, setQuery] = useState('');
-  const [result, setResult] = useState<WasteItemRule | null>(null);
+  const [result, setResult] = useState<(WasteItemRule & { vernacular?: { category?: any; tip?: any } }) | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
 
   const sampleItems = [
@@ -28,14 +32,15 @@ export const SmartCategorizer: React.FC = () => {
 
     setLoading(true);
     try {
-      const data = await categorizeWasteItem(textToSearch);
+      const data = await categorizeWasteItem(textToSearch, selectedLang);
       setResult({
         keywords: data.classification?.top?.matched || [],
-        category: data.category,
+        category: data.vernacular?.category?.translated_text || data.category,
         type: data.type,
         binColor: data.binColor,
-        tip: data.tip,
+        tip: data.vernacular?.tip?.translated_text || data.tip,
         co2SavingsKgPerKg: data.co2SavingsKgPerKg,
+        vernacular: data.vernacular,
       });
     } catch (err) {
       const fallback = categorizeItem(textToSearch);
@@ -136,9 +141,16 @@ export const SmartCategorizer: React.FC = () => {
             <div className="space-y-4">
               <div className="p-3.5 bg-white/90 rounded-xl border border-emerald-100 flex items-start gap-3">
                 <Leaf className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-gray-700 font-medium leading-relaxed">
-                  {result.tip}
-                </p>
+                <div>
+                  <p className="text-sm text-gray-700 font-medium leading-relaxed">
+                    {result.tip}
+                  </p>
+                  {result.vernacular?.tip?.phonetic_romanized && result.vernacular?.tip?.phonetic_romanized !== result.tip && (
+                    <p className="text-xs text-emerald-800 font-semibold mt-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60 inline-block">
+                      🗣️ Pronunciation: "{result.vernacular.tip.phonetic_romanized}"
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-gray-600 bg-emerald-100/40 p-3 rounded-xl">

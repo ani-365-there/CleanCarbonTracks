@@ -6,28 +6,51 @@ import { TaxonomyConfig, ClassificationMatch } from '../types';
 import { ClassificationEngine } from '../classifier';
 import { wasteTaxonomy } from '../defaultTaxonomies';
 
+import { categorizeWasteItem } from '@/lib/api';
+
 interface ClassificationWidgetProps {
   config?: TaxonomyConfig;
   onClassified?: (match: ClassificationMatch) => void;
   className?: string;
+  selectedLang?: string;
 }
 
 export const ClassificationWidget: React.FC<ClassificationWidgetProps> = ({
   config = wasteTaxonomy,
   onClassified,
   className = '',
+  selectedLang = 'en',
 }) => {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState<ClassificationMatch | null>(null);
+  const [vernacular, setVernacular] = useState<any>(null);
   const [hasSearched, setHasSearched] = useState(false);
 
   const engine = new ClassificationEngine(config);
 
-  const handleClassify = (text?: string) => {
+  const handleClassify = async (text?: string) => {
     const queryToSearch = text || query;
     if (!queryToSearch.trim()) return;
 
     const match = engine.classify(queryToSearch);
+    
+    try {
+      const data = await categorizeWasteItem(queryToSearch, selectedLang);
+      if (data.vernacular) {
+        setVernacular(data.vernacular);
+        if (data.vernacular.category?.translated_text) {
+          match.matchedCategory.name = data.vernacular.category.translated_text;
+        }
+        if (data.vernacular.tip?.translated_text) {
+          match.matchedCategory.handlingInstructions = data.vernacular.tip.translated_text;
+        }
+      } else {
+        setVernacular(null);
+      }
+    } catch (e) {
+      setVernacular(null);
+    }
+
     setResult(match);
     setHasSearched(true);
     if (onClassified) onClassified(match);
@@ -126,9 +149,16 @@ export const ClassificationWidget: React.FC<ClassificationWidgetProps> = ({
             <div className="space-y-3">
               <div className="p-3.5 bg-white/90 rounded-xl border border-emerald-100 flex items-start gap-3">
                 <Leaf className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-gray-700 font-medium leading-relaxed">
-                  {result.matchedCategory.handlingInstructions}
-                </p>
+                <div>
+                  <p className="text-sm text-gray-700 font-medium leading-relaxed">
+                    {result.matchedCategory.handlingInstructions}
+                  </p>
+                  {vernacular?.tip?.phonetic_romanized && vernacular?.tip?.phonetic_romanized !== result.matchedCategory.handlingInstructions && (
+                    <p className="text-xs text-emerald-800 font-semibold mt-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60 inline-block">
+                      🗣️ Pronunciation: "{vernacular.tip.phonetic_romanized}"
+                    </p>
+                  )}
+                </div>
               </div>
 
               {result.calculatedImpact && result.matchedCategory.impactMetricLabel && (

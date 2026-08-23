@@ -49,6 +49,7 @@ import {
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<string>('resident');
+  const [selectedLang, setSelectedLang] = useState<string>('en');
   const [bookings, setBookings] = useState<ServiceBookingItem[]>(initialBookingsState);
   const [incidents, setIncidents] = useState<IncidentReport[]>(initialIncidentsState);
   const [fleetUnits, setFleetUnits] = useState(initialFleetData);
@@ -77,7 +78,12 @@ export default function HomePage() {
 
   return (
     <div className="flex-1 flex flex-col justify-between min-h-screen relative">
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        selectedLang={selectedLang}
+        onLanguageChange={setSelectedLang}
+      />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 w-full flex-1">
         {/* Environmental Telemetry Header (Hidden in Modules Hub) */}
@@ -124,7 +130,7 @@ export default function HomePage() {
                 config={defaultWasteSchedulingConfig}
                 onBookingSubmitted={handleBookingCreated}
               />
-              <ClassificationWidget config={wasteTaxonomy} />
+              <ClassificationWidget config={wasteTaxonomy} selectedLang={selectedLang} />
             </div>
 
             {/* Fleet Radar Snapshot */}
@@ -165,7 +171,7 @@ export default function HomePage() {
         {/* Tab 2: Smart Categorizer Deep Dive */}
         {activeTab === 'categorizer' && (
           <div className="space-y-8 animate-fadeIn">
-            <ClassificationWidget config={wasteTaxonomy} />
+            <ClassificationWidget config={wasteTaxonomy} selectedLang={selectedLang} />
             <TaxonomyKnowledgeBase config={wasteTaxonomy} />
           </div>
         )}

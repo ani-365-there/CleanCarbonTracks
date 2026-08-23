@@ -1,14 +1,21 @@
 'use client';
 
 import React from 'react';
-import { Truck, Home, Search, ShieldCheck, MapPin, AlertCircle } from 'lucide-react';
+import { Truck, Home, Search, ShieldCheck, MapPin, AlertCircle, Globe } from 'lucide-react';
 
 interface NavbarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  selectedLang?: string;
+  onLanguageChange?: (lang: string) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  activeTab,
+  setActiveTab,
+  selectedLang = 'en',
+  onLanguageChange,
+}) => {
   const mainTabs = [
     { id: 'resident', label: 'Resident Portal', icon: Home },
     { id: 'categorizer', label: 'Smart Categorizer', icon: Search },
@@ -16,6 +23,19 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
     { id: 'complaints', label: 'Report Issue', icon: AlertCircle },
     { id: 'admin', label: 'Municipal Admin', icon: ShieldCheck },
     { id: 'driver', label: 'Driver View', icon: Truck },
+  ];
+
+  const languages = [
+    { code: 'en', label: '🌐 English' },
+    { code: 'hi', label: '🇮🇳 हिन्दी (Hindi)' },
+    { code: 'ta', label: '🇮🇳 தமிழ் (Tamil)' },
+    { code: 'te', label: '🇮🇳 తెలుగు (Telugu)' },
+    { code: 'kn', label: '🇮🇳 ಕನ್ನಡ (Kannada)' },
+    { code: 'mr', label: '🇮🇳 मराठी (Marathi)' },
+    { code: 'bn', label: '🇮🇳 বাংলা (Bengali)' },
+    { code: 'gu', label: '🇮🇳 ગુજરાતી (Gujarati)' },
+    { code: 'ml', label: '🇮🇳 മലയാളം (Malayalam)' },
+    { code: 'pa', label: '🇮🇳 ਪੰਜਾਬੀ (Punjabi)' },
   ];
 
   return (
@@ -40,27 +60,44 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             </div>
           </div>
 
-          {/* Clean Desktop Navigation Tabs */}
-          <nav className="hidden md:flex space-x-1">
-            {mainTabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
-                    isActive
-                      ? 'bg-white text-emerald-900 shadow-md font-bold'
-                      : 'text-green-50 hover:bg-white/15 hover:text-white'
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-700' : 'text-green-200'}`} />
-                  {tab.label}
-                </button>
-              );
-            })}
-          </nav>
+          {/* Clean Desktop Navigation Tabs & Language Dropdown */}
+          <div className="hidden md:flex items-center space-x-3">
+            <nav className="flex space-x-1">
+              {mainTabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
+                      isActive
+                        ? 'bg-white text-emerald-900 shadow-md font-bold'
+                        : 'text-green-50 hover:bg-white/15 hover:text-white'
+                    }`}
+                  >
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-700' : 'text-green-200'}`} />
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </nav>
+
+            {/* Vernacular Language Selector */}
+            <div className="relative">
+              <select
+                value={selectedLang}
+                onChange={(e) => onLanguageChange && onLanguageChange(e.target.value)}
+                className="bg-emerald-900/60 hover:bg-emerald-900 text-white text-xs font-semibold px-3 py-2 rounded-xl border border-emerald-400/40 focus:outline-none focus:ring-2 focus:ring-emerald-300 cursor-pointer backdrop-blur-sm transition"
+              >
+                {languages.map((l) => (
+                  <option key={l.code} value={l.code} className="bg-emerald-900 text-white font-medium">
+                    {l.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
 
         {/* Mobile Tab Bar */}

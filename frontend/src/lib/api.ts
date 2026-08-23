@@ -21,8 +21,19 @@ export async function fetchFromBackend(endpoint: string, options: RequestInit = 
   return response.json();
 }
 
-export async function categorizeWasteItem(item: string) {
-  return fetchFromBackend(`/api/categorize?item=${encodeURIComponent(item)}`);
+export async function categorizeWasteItem(item: string, lang: string = 'en') {
+  return fetchFromBackend(`/api/categorize?item=${encodeURIComponent(item)}&lang=${encodeURIComponent(lang)}`);
+}
+
+export async function fetchSupportedLanguages() {
+  return fetchFromBackend('/api/languages');
+}
+
+export async function translateText(text: string, targetLanguage: string = 'hi') {
+  return fetchFromBackend('/api/translate', {
+    method: 'POST',
+    body: JSON.stringify({ text, target_language: targetLanguage }),
+  });
 }
 
 export async function fetchAnalyticsData() {

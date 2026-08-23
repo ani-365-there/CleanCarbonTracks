@@ -4,7 +4,12 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT / "modules"), str(ROOT / "platform"), str(ROOT / "apps")]
+sys.path[:0] = [
+    str(ROOT / "modules"),
+    str(ROOT / "modules" / "vernacular_wrapper"),
+    str(ROOT / "platform"),
+    str(ROOT / "apps")
+]
 
 from fastapi import FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,6 +17,7 @@ from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from waste_network import create_waste_network
 from image_classifier.classifier import ImageClassifier, WASTE_CAMPUS_TAXONOMY
+from translator import translator, SUPPORTED_LANGUAGES
 
 STATIC = Path(__file__).parent / "static"
 MIME_MAP = {
@@ -60,6 +66,20 @@ def root():
     return FileResponse(STATIC / "index.html")
 
 
+@app.get("/api/languages")
+def get_languages():
+    return {"languages": SUPPORTED_LANGUAGES}
+
+
+@app.post("/api/translate")
+def translate_text(payload: dict):
+    text = payload.get("text") or ""
+    target_lang = payload.get("target_language") or "hi"
+    if not text.strip():
+        raise HTTPException(400, "Text is required")
+    return translator.translate_text(text, target_lang)
+
+
 @app.post("/api/session")
 def session(payload: dict):
     role = (payload.get("role") or "").strip().lower()
@@ -80,7 +100,7 @@ def me(authorization: str | None = Header(default=None)):
 
 
 @app.get("/api/categorize")
-def categorize(item: str):
+def categorize(item: str, lang: str = "en"):
     if not item or not item.strip():
         raise HTTPException(400, "Item query required")
     res = classifier.classify(text=item)
@@ -127,9 +147,17 @@ def categorize(item: str):
         "co2SavingsKgPerKg": 0.2,
     })
     
+    vernacular = None
+    if lang and lang != "en":
+        vernacular = {
+            "category": translator.translate_text(meta["category"], lang),
+            "tip": translator.translate_text(meta["tip"], lang),
+        }
+    
     return {
         "item": item,
         "classification": res,
+        "vernacular": vernacular,
         **meta
     }
 
