@@ -1,4 +1,8 @@
 export interface UITranslations {
+  // Brand Header
+  brandTitle: string;
+  brandSubtitle: string;
+
   // Navigation
   residentPortal: string;
   smartCategorizer: string;
@@ -26,37 +30,46 @@ export interface UITranslations {
   schedulePickupBtn: string;
   liveTruckRadarBtn: string;
 
-  // Smart Categorizer / Classification Widget
-  categorizerTitle: string;
-  categorizerSubtitle: string;
-  searchPlaceholder: string;
-  identifyBtn: string;
-  quickTests: string;
-  identifiedStream: string;
-  carbonOffsetPotential: string;
-  divertedFromLandfill: string;
-  dosLabel: string;
-  dontsLabel: string;
-  lifecycleFactLabel: string;
-
   // Booking Form
-  bookingTitle: string;
-  bookingSubtitle: string;
-  fullName: string;
-  preferredDate: string;
-  pickupAddress: string;
-  wasteCategory: string;
-  preparationTip: string;
-  quantityNotes: string;
+  doorstepPickupTitle: string;
+  doorstepPickupSubtitle: string;
+  customerNameLabel: string;
+  customerNamePlaceholder: string;
+  preferredDateLabel: string;
+  addressLabel: string;
+  addressPlaceholder: string;
+  wasteStreamLabel: string;
+  prepTipHeader: string;
+  dryRecyclablesTag: string;
+  notesLabel: string;
+  notesPlaceholder: string;
   confirmBookingBtn: string;
   confirmingMsg: string;
   bookingSuccessTitle: string;
   bookingRef: string;
   bookAnotherBtn: string;
+
+  // Classification Widget
+  widgetTitle: string;
+  widgetSubtitle: string;
+  searchPlaceholder: string;
+  identifyBtn: string;
+  quickTestsLabel: string;
+  classificationResultHeader: string;
+  matchLabel: string;
+  verifiedStreamProcessed: string;
+  co2AvoidedPrefix: string;
+  kgProcessedSuffix: string;
+
+  // Floating Hub
+  modulesHub: string;
 }
 
 export const I18N_DICTIONARY: Record<string, UITranslations> = {
   en: {
+    brandTitle: 'CleanCarbon Tracks',
+    brandSubtitle: 'Smart Municipal Waste & Circular Telematics',
+
     residentPortal: 'Resident Portal',
     smartCategorizer: 'Smart Categorizer',
     fleetRadar: 'Fleet Radar',
@@ -77,38 +90,46 @@ export const I18N_DICTIONARY: Record<string, UITranslations> = {
 
     integratedSolution: 'Integrated Municipal Solution',
     heroTitle: 'Doorstep Waste Segregation, Dynamic Routing & Carbon Tracking',
-    heroSubtitle: 'Schedule doorstep pickups for recyclable streams, identify segregation bin types with AI, and track municipal sanitation trucks in real-time.',
+    heroSubtitle: 'Never miss garbage collection again. Schedule doorstep pickups for recyclable streams, identify segregation bin types with AI, and track municipal sanitation trucks in real-time.',
     schedulePickupBtn: 'Schedule Pickup',
     liveTruckRadarBtn: 'Live Truck Radar',
 
-    categorizerTitle: 'AI-Powered Smart Waste Categorizer',
-    categorizerSubtitle: 'Instant segregation rules, bin mapping, and carbon offsets',
+    doorstepPickupTitle: 'Municipal Waste Doorstep Pickup',
+    doorstepPickupSubtitle: 'Fast, verified on-demand doorstep booking',
+    customerNameLabel: 'Customer Name',
+    customerNamePlaceholder: 'e.g. Aarav Sharma',
+    preferredDateLabel: 'Preferred Date',
+    addressLabel: 'Service Location / Address',
+    addressPlaceholder: 'e.g. Flat 402, Green Glen Towers, Sector 4',
+    wasteStreamLabel: 'Waste Stream',
+    prepTipHeader: 'PREPARATION TIP',
+    dryRecyclablesTag: 'Dry Recyclables',
+    notesLabel: 'Quantity / Handling Notes (Optional)',
+    notesPlaceholder: 'e.g. 2 large sacks, please call before arriving',
+    confirmBookingBtn: 'Confirm Service Booking',
+    confirmingMsg: 'Confirming with Municipality...',
+    bookingSuccessTitle: 'Appointment Confirmed!',
+    bookingRef: 'Booking Reference:',
+    bookAnotherBtn: 'Book Another Pickup',
+
+    widgetTitle: 'Smart Waste Categorizer & Circular Impact',
+    widgetSubtitle: 'AI-assisted segregation engine with real-time carbon offset telemetry',
     searchPlaceholder: 'Search item (e.g. plastic bottle, banana peel, battery, cardboard)...',
     identifyBtn: 'Identify',
-    quickTests: 'Quick tests:',
-    identifiedStream: 'Identified Stream',
-    carbonOffsetPotential: 'Carbon Offset potential',
-    divertedFromLandfill: '100% Diverted from Landfill',
-    dosLabel: 'RECOMMENDED (DOs)',
-    dontsLabel: 'AVOID (DON\'Ts)',
-    lifecycleFactLabel: 'CIRCULAR ECONOMY FACT',
+    quickTestsLabel: 'Quick tests:',
+    classificationResultHeader: 'CLASSIFICATION RESULT',
+    matchLabel: 'Match',
+    verifiedStreamProcessed: 'Verified Stream Processed',
+    co2AvoidedPrefix: 'CO₂ Avoided:',
+    kgProcessedSuffix: 'kg CO₂ / kg processed',
 
-    bookingTitle: 'Schedule On-Demand Waste Pickup',
-    bookingSubtitle: 'Book doorstep pickup for segregated waste streams',
-    fullName: 'Full Name',
-    preferredDate: 'Preferred Date',
-    pickupAddress: 'Pickup Address / Landmark',
-    wasteCategory: 'Primary Waste Category',
-    preparationTip: 'Preparation Tip',
-    quantityNotes: 'Quantity / Special Notes (Optional)',
-    confirmBookingBtn: 'Book Doorstep Pickup',
-    confirmingMsg: 'Confirming with Municipality...',
-    bookingSuccessTitle: 'Pickup Scheduled!',
-    bookingRef: 'Confirmation Ref:',
-    bookAnotherBtn: 'Book Another Pickup',
+    modulesHub: 'Enterprise Modules Hub',
   },
   hi: {
-    residentPortal: 'रेजिडेंट पोर्टल (नागरिक सेवा)',
+    brandTitle: 'क्लिनकार्बन ट्रैक्स',
+    brandSubtitle: 'स्मार्ट नगर निगम कचरा प्रबंधन एवं सर्कुलर टेलीमैटिक्स',
+
+    residentPortal: 'रेजिडेंट पोर्टल',
     smartCategorizer: 'स्मार्ट कचरा श्रेणीकरण',
     fleetRadar: 'इको-वाहन राडार',
     reportIssue: 'समस्या रिपोर्ट करें',
@@ -122,45 +143,53 @@ export const I18N_DICTIONARY: Record<string, UITranslations> = {
     wasteDiverted: 'कचरा पुनर्चक्रण दर',
     co2Saved: 'CO₂ उत्सर्जन बचत',
     activeSmartFleet: 'सक्रिय स्मार्ट वाहन',
-    fromLandfills: 'लैंडफिल से बचाया',
+    fromLandfills: 'लैंडफिल से बचाया गया',
     netOffset: 'कुल कार्बन ऑफसेट',
     electricTrucks: 'इलेक्ट्रिक / जीपीएस ट्रक',
 
     integratedSolution: 'एकीकृत नगर निगम समाधान',
     heroTitle: 'घर-घर कचरा पृथक्करण, डायनेमिक रूटिंग और कार्बन ट्रैकिंग',
-    heroSubtitle: 'पुनर्चक्रण योग्य कचरे के लिए डोरस्टेप पिकअप शेड्यूल करें, एआई के साथ बिन प्रकारों की पहचान करें और वास्तविक समय में स्वच्छता ट्रकों को ट्रैक करें।',
+    heroSubtitle: 'कचरा संग्रहण कभी न छूटने दें। पुनर्चक्रण योग्य कचरे के लिए घर-घर पिकअप शेड्यूल करें, एआई के साथ बिन प्रकारों की पहचान करें और वास्तविक समय में स्वच्छता ट्रकों को ट्रैक करें।',
     schedulePickupBtn: 'पिकअप शेड्यूल करें',
     liveTruckRadarBtn: 'लाइव ट्रक राडार',
 
-    categorizerTitle: 'एआई-संचालित स्मार्ट कचरा श्रेणीकरण',
-    categorizerSubtitle: 'तत्काल पृथक्करण नियम, बिन मैपिंग और कार्बन ऑफसेट',
-    searchPlaceholder: 'कचरा खोजें (जैसे प्लास्टिक बोतल, केले का छिलका, बैटरी, कार्डबोर्ड)...',
-    identifyBtn: 'पहचानें (Search)',
-    quickTests: 'त्वरित परीक्षण:',
-    identifiedStream: 'पहचाना गया कचरा प्रकार',
-    carbonOffsetPotential: 'कार्बन ऑफसेट क्षमता',
-    divertedFromLandfill: '100% लैंडफिल से बचाया गया',
-    dosLabel: 'अनुशंसित (क्या करें)',
-    dontsLabel: 'वर्जित (क्या न करें)',
-    lifecycleFactLabel: 'सर्कुलर इकोनॉमी तथ्य',
-
-    bookingTitle: 'ऑन-डिमांड कचरा पिकअप शेड्यूल करें',
-    bookingSubtitle: 'पृथक कचरा श्रेणियों के लिए घर-घर पिकअप बुक करें',
-    fullName: 'पूरा नाम',
-    preferredDate: 'पसंदीदा तारीख',
-    pickupAddress: 'पिकअप पता / लैंडमार्क',
-    wasteCategory: 'प्राथमिक कचरा श्रेणी',
-    preparationTip: 'तैयारी टिप',
-    quantityNotes: 'मात्रा / विशेष टिप्पणी (वैकल्पिक)',
-    confirmBookingBtn: 'डोरस्टेप पिकअप बुक करें',
+    doorstepPickupTitle: 'नगर निगम कचरा डोरस्टेप पिकअप',
+    doorstepPickupSubtitle: 'तेज, सत्यापित ऑन-डिमांड पिकअप बुकिंग',
+    customerNameLabel: 'ग्राहक का नाम',
+    customerNamePlaceholder: 'जैसे: आरव शर्मा',
+    preferredDateLabel: 'पसंदीदा तारीख',
+    addressLabel: 'सेवा स्थान / पता',
+    addressPlaceholder: 'जैसे: फ्लैट 402, ग्रीन ग्लेन टावर्स, सेक्टर 4',
+    wasteStreamLabel: 'कचरा श्रेणी (वेस्ट स्ट्रीम)',
+    prepTipHeader: 'तैयारी टिप',
+    dryRecyclablesTag: 'सूखा कचरा (पुनर्चक्रण)',
+    notesLabel: 'मात्रा / हैंडलिंग नोट्स (वैकल्पिक)',
+    notesPlaceholder: 'जैसे: 2 बड़े बोरे, आने से पहले कॉल करें',
+    confirmBookingBtn: 'सेवा बुकिंग की पुष्टि करें',
     confirmingMsg: 'नगर निगम से पुष्टि हो रही है...',
-    bookingSuccessTitle: 'पिकअप सफलतापूर्वक शेड्यूल हुआ!',
-    bookingRef: 'पुष्टि संदर्भ:',
+    bookingSuccessTitle: 'बुकिंग सफलतापूर्वक संपन्न!',
+    bookingRef: 'बुकिंग संदर्भ संख्या:',
     bookAnotherBtn: 'एक और पिकअप बुक करें',
+
+    widgetTitle: 'स्मार्ट कचरा श्रेणीकरण और सर्कुलर प्रभाव',
+    widgetSubtitle: 'रियल-टाइम कार्बन ऑफसेट टेलीमेट्री के साथ एआई पृथक्करण इंजन',
+    searchPlaceholder: 'कचरा खोजें (जैसे: प्लास्टिक बोतल, केले का छिलका, बैटरी)...',
+    identifyBtn: 'पहचानें (Identify)',
+    quickTestsLabel: 'त्वरित परीक्षण:',
+    classificationResultHeader: 'श्रेणीकरण परिणाम (CLASSIFICATION RESULT)',
+    matchLabel: 'सटीकता',
+    verifiedStreamProcessed: 'सत्यापित कचरा प्रसंस्कृत',
+    co2AvoidedPrefix: 'CO₂ बचत:',
+    kgProcessedSuffix: 'किग्रा CO₂ / किग्रा प्रसंस्कृत',
+
+    modulesHub: 'एंटरप्राइज मॉड्यूल हब',
   },
   ta: {
+    brandTitle: 'கிளீன்கார்பன் டிராக்ஸ்',
+    brandSubtitle: 'ஸ்மார்ட் கழிவு மேலாண்மை மற்றும் டெலிமேடிக்ஸ்',
+
     residentPortal: 'குடிமகன் சேவை',
-    smartCategorizer: 'ஸ்மார்ட் கழிவு வகைப்பாடு',
+    smartCategorizer: 'கழிவு வகைப்பாடு',
     fleetRadar: 'வாகன ரேடார்',
     reportIssue: 'புகார் அளிக்கவும்',
     municipalAdmin: 'நகராட்சி நிர்வாகம்',
@@ -183,35 +212,43 @@ export const I18N_DICTIONARY: Record<string, UITranslations> = {
     schedulePickupBtn: 'சேகரிப்பு நேரம்',
     liveTruckRadarBtn: 'வாகன ரேடார்',
 
-    categorizerTitle: 'AI கழிவு வகைப்படுத்தி',
-    categorizerSubtitle: 'உடனடி பிரித்தெடுக்கும் விதிகள் மற்றும் கார்பன் கணக்கீடு',
-    searchPlaceholder: 'பொருளைத் தேடுங்கள் (எ.கா. பிளாஸ்டிக் பாட்டில், வாழைப்பழத் தோல்)...',
-    identifyBtn: 'கண்டறி',
-    quickTests: 'விரைவு சோதனைகள்:',
-    identifiedStream: 'கண்டறியப்பட்ட கழிவு வகை',
-    carbonOffsetPotential: 'கார்பன் சேமிப்பு திறன்',
-    divertedFromLandfill: '100% மீட்கப்பட்டது',
-    dosLabel: 'செய்ய வேண்டியவை',
-    dontsLabel: 'தவிர்க்க வேண்டியவை',
-    lifecycleFactLabel: 'சுழற்சி பொருளாதார தகவல்',
-
-    bookingTitle: 'கழிவு சேகரிப்பை பதிவு செய்',
-    bookingSubtitle: 'வீட்டு வாசலில் கழிவு சேகரிப்பு முன்பதிவு',
-    fullName: 'முழு பெயர்',
-    preferredDate: 'விரும்பும் தேதி',
-    pickupAddress: 'முகவரி / அடையாளம்',
-    wasteCategory: 'முதன்மை கழிவு வகை',
-    preparationTip: 'தயாரிப்பு குறிப்பு',
-    quantityNotes: 'அளவு / குறிப்புகள்',
-    confirmBookingBtn: 'முன்பதிவு செய்',
+    doorstepPickupTitle: 'நகராட்சி கழிவு சேகரிப்பு',
+    doorstepPickupSubtitle: 'விரைவான வீட்டு வாசல் முன்பதிவு',
+    customerNameLabel: 'வாடிக்கையாளர் பெயர்',
+    customerNamePlaceholder: 'எ.கா. ஆரவ் சர்மா',
+    preferredDateLabel: 'விரும்பும் தேதி',
+    addressLabel: 'முகவரி / இடம்',
+    addressPlaceholder: 'எ.கா. பிளாட் 402, கிரீன் கார்டன்',
+    wasteStreamLabel: 'கழிவு வகை',
+    prepTipHeader: 'தயாரிப்பு குறிப்பு',
+    dryRecyclablesTag: 'உலர் மறுசுழற்சி',
+    notesLabel: 'அளவு / குறிப்புகள்',
+    notesPlaceholder: 'எ.கா. 2 பெரிய பைகள்',
+    confirmBookingBtn: 'முன்பதிவை உறுதிசெய்',
     confirmingMsg: 'உறுதி செய்யப்படுகிறது...',
-    bookingSuccessTitle: 'சேகரிப்பு திட்டமிடப்பட்டது!',
+    bookingSuccessTitle: 'முன்பதிவு முடிந்தது!',
     bookingRef: 'குறிப்பு எண்:',
     bookAnotherBtn: 'மற்றொரு முன்பதிவு',
+
+    widgetTitle: 'AI கழிவு வகைப்பாடு மற்றும் சுற்றுச்சூழல் தாக்கம்',
+    widgetSubtitle: 'நேரலை கார்பன் கணக்கீட்டுடன் கூடிய கழிவு பிரித்தெடுக்கும் முறை',
+    searchPlaceholder: 'பொருளைத் தேடுங்கள் (எ.கா. பிளாஸ்டிக் பாட்டில்)...',
+    identifyBtn: 'கண்டறி',
+    quickTestsLabel: 'விரைவு சோதனைகள்:',
+    classificationResultHeader: 'வகைப்பாடு முடிவு',
+    matchLabel: 'பொருத்தம்',
+    verifiedStreamProcessed: 'சரிபார்க்கப்பட்ட கழிவு',
+    co2AvoidedPrefix: 'CO₂ சேமிப்பு:',
+    kgProcessedSuffix: 'கிலோ CO₂ / கிலோ',
+
+    modulesHub: 'நிறுவன தொகுதி மையம்',
   },
   te: {
+    brandTitle: 'క్లీన్‌కార్బన్ ట్రాక్స్',
+    brandSubtitle: 'స్మార్ట్ మున్సిపల్ వేస్ట్ అండ్ సర్క్యులర్ టెలిమాటిక్స్',
+
     residentPortal: 'పౌర సేవలు',
-    smartCategorizer: 'స్మార్ట్ వ్యర్థాల వర్గీకరణ',
+    smartCategorizer: 'వ్యర్థాల వర్గీకరణ',
     fleetRadar: 'వాహన రాడార్',
     reportIssue: 'ఫిర్యాదు చేయండి',
     municipalAdmin: 'మున్సిపల్ అడ్మిన్',
@@ -234,31 +271,36 @@ export const I18N_DICTIONARY: Record<string, UITranslations> = {
     schedulePickupBtn: 'సేకరణ షెడ్యూల్ చేయండి',
     liveTruckRadarBtn: 'లైవ్ రాడార్',
 
-    categorizerTitle: 'AI వ్యర్థాల వర్గీకరణ',
-    categorizerSubtitle: 'తక్షణ విభజన నియమాలు మరియు కార్బన్ లెక్కింపు',
-    searchPlaceholder: 'వస్తువును శోధించండి (ఉదా. ప్లాస్టిక్ బాటిల్, అరటి తొక్క)...',
-    identifyBtn: 'గుర్తించు',
-    quickTests: 'త్వరిత పరీక్షలు:',
-    identifiedStream: 'గుర్తించబడిన రకం',
-    carbonOffsetPotential: 'కార్బన్ ఆదా సామర్థ్యం',
-    divertedFromLandfill: '100% రక్షించబడింది',
-    dosLabel: 'చేయవలసినవి',
-    dontsLabel: 'చేయకూడనివి',
-    lifecycleFactLabel: 'రీసైక్లింగ్ సమాచారం',
-
-    bookingTitle: 'వ్యర్థాల సేకరణను బుక్ చేయండి',
-    bookingSubtitle: 'ఇంటి వద్ద వ్యర్థాల సేకరణ బుకింగ్',
-    fullName: 'పూర్తి పేరు',
-    preferredDate: 'కోరుకున్న తేదీ',
-    pickupAddress: 'చిరునామా / ల్యాండ్‌మార్క్',
-    wasteCategory: 'ప్రధాన వ్యర్థాల రకం',
-    preparationTip: 'చిట్కా',
-    quantityNotes: 'పరిమాణం / గమనికలు',
-    confirmBookingBtn: 'బుక్ చేయండి',
+    doorstepPickupTitle: 'ఇంటి వద్ద వ్యర్థాల సేకరణ',
+    doorstepPickupSubtitle: 'వేగవంతమైన డిమాండ్ బుకింగ్',
+    customerNameLabel: 'వినియోగదారుని పేరు',
+    customerNamePlaceholder: 'ఉదా. ఆరవ్ శర్మ',
+    preferredDateLabel: 'కోరుకున్న తేదీ',
+    addressLabel: 'చిరునామా / ప్రాంతం',
+    addressPlaceholder: 'ఉదా. ఫ్లాట్ 402, గ్రీన్ విల్లాస్',
+    wasteStreamLabel: 'వ్యర్థాల రకం',
+    prepTipHeader: 'చిట్కా',
+    dryRecyclablesTag: 'పొడి రీసైకిల్',
+    notesLabel: 'పరిమాణం / గమనికలు',
+    notesPlaceholder: 'ఉదా. 2 పెద్ద సంచులు',
+    confirmBookingBtn: 'బుకింగ్‌ను నిర్ధారించండి',
     confirmingMsg: 'స్థిరీకరిస్తోంది...',
-    bookingSuccessTitle: 'సేకరణ షెడ్యూల్ చేయబడింది!',
+    bookingSuccessTitle: 'బుకింగ్ పూర్తయింది!',
     bookingRef: 'రెఫరెన్స్ సంఖ్య:',
     bookAnotherBtn: 'మరొకటి బుక్ చేయండి',
+
+    widgetTitle: 'AI వ్యర్థాల వర్గీకరణ మరియు ప్రభావం',
+    widgetSubtitle: 'రియల్ టైమ్ కార్బన్ ట్రాకింగ్‌తో వ్యర్థాల వర్గీకరణ',
+    searchPlaceholder: 'వస్తువును శోధించండి (ఉదా. ప్లాస్టిక్ బాటిల్)...',
+    identifyBtn: 'గుర్తించు',
+    quickTestsLabel: 'త్వరిత పరీక్షలు:',
+    classificationResultHeader: 'వర్గీకరణ ఫలితం',
+    matchLabel: 'సామర్థ్యం',
+    verifiedStreamProcessed: 'ధృవీకరించబడిన వ్యర్థాలు',
+    co2AvoidedPrefix: 'CO₂ ఆదా:',
+    kgProcessedSuffix: 'కిలో CO₂ / కిలో',
+
+    modulesHub: 'మాడ్యూల్స్ హబ్',
   }
 };
 

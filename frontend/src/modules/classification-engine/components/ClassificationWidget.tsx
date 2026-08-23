@@ -8,6 +8,7 @@ import { wasteTaxonomy } from '../defaultTaxonomies';
 
 import { categorizeWasteItem } from '@/lib/api';
 import { getLocalVernacularTranslation } from '@/lib/vernacular';
+import { getTranslation } from '@/lib/i18n';
 
 interface ClassificationWidgetProps {
   config?: TaxonomyConfig;
@@ -77,6 +78,8 @@ export const ClassificationWidget: React.FC<ClassificationWidgetProps> = ({
     }
   }, [selectedLang]);
 
+  const t = getTranslation(selectedLang);
+
   const getBadgeStyle = (color: string) => {
     switch (color) {
       case 'green':
@@ -94,6 +97,15 @@ export const ClassificationWidget: React.FC<ClassificationWidgetProps> = ({
     }
   };
 
+  const getTranslatedBadgeLabel = (label: string) => {
+    if (selectedLang !== 'hi') return label;
+    if (label.includes('Blue')) return 'नीला सूखा कचरा बिन';
+    if (label.includes('Green')) return 'हरा गीला कचरा बिन';
+    if (label.includes('Yellow')) return 'पीला धातु कचरा बिन';
+    if (label.includes('Red')) return 'लाल ई-कचरा ड्रॉप केंद्र';
+    return label;
+  };
+
   return (
     <div className={`glass-panel p-6 sm:p-8 rounded-3xl border border-green-100 shadow-xl transition-all ${className}`}>
       <div className="flex items-center space-x-3 mb-6">
@@ -101,8 +113,8 @@ export const ClassificationWidget: React.FC<ClassificationWidgetProps> = ({
           <Sparkles className="w-6 h-6" />
         </div>
         <div>
-          <h3 className="text-xl font-bold text-gray-900">{config.title || 'AI Classification Engine'}</h3>
-          <p className="text-sm text-gray-500">{config.subtitle || 'Real-time multi-class item categorization'}</p>
+          <h3 className="text-xl font-bold text-gray-900">{selectedLang === 'hi' ? t.widgetTitle : (config.title || 'AI Classification Engine')}</h3>
+          <p className="text-sm text-gray-500">{selectedLang === 'hi' ? t.widgetSubtitle : (config.subtitle || 'Real-time multi-class item categorization')}</p>
         </div>
       </div>
 
@@ -118,22 +130,22 @@ export const ClassificationWidget: React.FC<ClassificationWidgetProps> = ({
                 handleClassify();
               }
             }}
-            placeholder={config.searchPlaceholder || 'Type item name to classify...'}
+            placeholder={t.searchPlaceholder}
             className="w-full pl-12 pr-28 py-3.5 rounded-2xl border-2 border-emerald-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none text-gray-800 font-medium bg-white/90 text-sm sm:text-base transition"
           />
           <Search className="w-5 h-5 text-emerald-500 absolute left-4 top-1/2 -translate-y-1/2" />
           <button
             onClick={() => handleClassify()}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition shadow-sm"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition shadow-sm cursor-pointer"
           >
-            Identify
+            {t.identifyBtn}
           </button>
         </div>
 
         {/* Suggestion tags */}
         {config.sampleQueries && config.sampleQueries.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 pt-1">
-            <span className="text-xs font-semibold text-gray-500">Quick tests:</span>
+            <span className="text-xs font-semibold text-gray-500">{t.quickTestsLabel}</span>
             {config.sampleQueries.map((item, idx) => (
               <button
                 key={idx}
@@ -141,7 +153,7 @@ export const ClassificationWidget: React.FC<ClassificationWidgetProps> = ({
                   setQuery(item);
                   handleClassify(item);
                 }}
-                className="text-xs bg-white/80 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 px-2.5 py-1 rounded-lg border border-gray-200 hover:border-emerald-300 transition"
+                className="text-xs bg-white/80 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 px-2.5 py-1 rounded-lg border border-gray-200 hover:border-emerald-300 transition cursor-pointer"
               >
                 {item}
               </button>
@@ -154,15 +166,15 @@ export const ClassificationWidget: React.FC<ClassificationWidgetProps> = ({
           <div className="mt-6 p-6 rounded-2xl bg-gradient-to-br from-white to-emerald-50/50 border border-emerald-200 shadow-md animate-fadeIn">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-gray-100">
               <div>
-                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Classification Result</span>
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{t.classificationResultHeader}</span>
                 <h4 className="text-lg font-bold text-gray-900">{result.matchedCategory.name}</h4>
               </div>
               <div className="flex items-center gap-2">
                 <span className={`px-3 py-1 rounded-full text-xs font-bold border uppercase ${getBadgeStyle(result.matchedCategory.badgeColor)}`}>
-                  {result.matchedCategory.badgeLabel}
+                  {getTranslatedBadgeLabel(result.matchedCategory.badgeLabel)}
                 </span>
                 <span className="px-2 py-0.5 rounded-lg bg-gray-100 text-gray-700 text-xs font-mono font-semibold">
-                  {Math.round(result.confidence * 100)}% Match
+                  {Math.round(result.confidence * 100)}% {t.matchLabel}
                 </span>
               </div>
             </div>
@@ -186,10 +198,10 @@ export const ClassificationWidget: React.FC<ClassificationWidgetProps> = ({
                 <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-gray-600 bg-emerald-100/40 p-3 rounded-xl">
                   <div className="flex items-center gap-1.5 font-medium text-emerald-900">
                     <Flame className="w-4 h-4 text-orange-500" />
-                    <span>{result.matchedCategory.impactMetricLabel}: <strong>~{result.calculatedImpact} kg CO₂ / kg processed</strong></span>
+                    <span>{selectedLang === 'hi' ? t.co2AvoidedPrefix : result.matchedCategory.impactMetricLabel}: <strong>~{result.calculatedImpact} {t.kgProcessedSuffix}</strong></span>
                   </div>
                   <span className="text-emerald-700 font-semibold flex items-center gap-1">
-                    Verified Stream Processed <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                    {t.verifiedStreamProcessed} <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
                   </span>
                 </div>
               )}

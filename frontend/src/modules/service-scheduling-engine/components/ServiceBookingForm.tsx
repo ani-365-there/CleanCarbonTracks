@@ -79,8 +79,8 @@ export const ServiceBookingForm: React.FC<ServiceBookingFormProps> = ({
           <Calendar className="w-6 h-6" />
         </div>
         <div>
-          <h3 className="text-xl font-bold text-gray-900">{t.bookingTitle}</h3>
-          <p className="text-sm text-gray-500">{t.bookingSubtitle}</p>
+          <h3 className="text-xl font-bold text-gray-900">{t.doorstepPickupTitle}</h3>
+          <p className="text-sm text-gray-500">{t.doorstepPickupSubtitle}</p>
         </div>
       </div>
 
@@ -132,21 +132,21 @@ export const ServiceBookingForm: React.FC<ServiceBookingFormProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
-                <User className="w-4 h-4 text-green-600" /> Customer Name
+                <User className="w-4 h-4 text-green-600" /> {t.customerNameLabel}
               </label>
               <input
                 type="text"
                 required
                 value={formData.customerName}
                 onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
-                placeholder="e.g. Aarav Sharma"
+                placeholder={t.customerNamePlaceholder}
                 className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white/80 text-gray-800"
               />
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-green-600" /> Preferred Date
+                <Calendar className="w-4 h-4 text-green-600" /> {t.preferredDateLabel}
               </label>
               <input
                 type="date"
@@ -161,20 +161,20 @@ export const ServiceBookingForm: React.FC<ServiceBookingFormProps> = ({
 
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
-              <MapPin className="w-4 h-4 text-green-600" /> Service Location / Address
+              <MapPin className="w-4 h-4 text-green-600" /> {t.addressLabel}
             </label>
             <input
               type="text"
               required
               value={formData.contactAddress}
               onChange={(e) => setFormData({ ...formData, contactAddress: e.target.value })}
-              placeholder="e.g. Flat 402, Green Glen Towers, Sector 4"
+              placeholder={t.addressPlaceholder}
               className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white/80 text-gray-800"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">{config.serviceTypeLabel}</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.wasteStreamLabel}</label>
             <select
               value={formData.categoryId}
               onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
@@ -182,7 +182,7 @@ export const ServiceBookingForm: React.FC<ServiceBookingFormProps> = ({
             >
               {config.categories.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.label} {c.badge ? `(${c.badge})` : ''}
+                  {selectedLang === 'hi' ? (c.id === 'plastic' ? 'प्लास्टिक और पैकेजिंग (ब्लू ड्राई बिन)' : c.label) : c.label} {c.badge ? `(${c.badge})` : ''}
                 </option>
               ))}
             </select>
@@ -194,14 +194,16 @@ export const ServiceBookingForm: React.FC<ServiceBookingFormProps> = ({
                 <span className="text-2xl">💡</span>
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-bold text-emerald-900 uppercase tracking-wide">Preparation Tip</span>
+                    <span className="font-bold text-emerald-900 uppercase tracking-wide">{t.prepTipHeader}</span>
                     {selectedCategory.guidanceBin && (
                       <span className="px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-800 font-semibold text-[10px]">
-                        {selectedCategory.guidanceBin}
+                        {selectedLang === 'hi' ? t.dryRecyclablesTag : selectedCategory.guidanceBin}
                       </span>
                     )}
                   </div>
-                  <p className="text-emerald-800 leading-relaxed">{selectedCategory.preparationTip}</p>
+                  <p className="text-emerald-800 leading-relaxed">
+                    {selectedLang === 'hi' ? 'बोतलों को धोएं और समतल करें।' : selectedCategory.preparationTip}
+                  </p>
                 </div>
               </div>
             </div>
@@ -209,13 +211,13 @@ export const ServiceBookingForm: React.FC<ServiceBookingFormProps> = ({
 
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
-              <Info className="w-4 h-4 text-gray-400" /> Quantity / Handling Notes (Optional)
+              <Info className="w-4 h-4 text-gray-400" /> {t.notesLabel}
             </label>
             <input
               type="text"
               value={formData.specialNotes}
               onChange={(e) => setFormData({ ...formData, specialNotes: e.target.value })}
-              placeholder="e.g. 2 large sacks, please call before arriving"
+              placeholder={t.notesPlaceholder}
               className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white/80 text-gray-800 text-sm"
             />
           </div>
@@ -227,11 +229,11 @@ export const ServiceBookingForm: React.FC<ServiceBookingFormProps> = ({
           >
             {isSubmitting ? (
               <>
-                <Clock className="w-5 h-5 animate-spin" /> Dispatching Request...
+                <Clock className="w-5 h-5 animate-spin" /> {t.confirmingMsg}
               </>
             ) : (
               <>
-                <CheckCircle2 className="w-5 h-5" /> Confirm Service Booking
+                <CheckCircle2 className="w-5 h-5" /> {t.confirmBookingBtn}
               </>
             )}
           </button>
