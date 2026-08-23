@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { MetricsGrid } from '@/components/analytics/MetricsGrid';
+import { getTranslation } from '@/lib/i18n';
 
 // 🚀 Generalized Modular Engines
 import {
@@ -76,6 +77,8 @@ export default function HomePage() {
     }));
   };
 
+  const t = getTranslation(selectedLang);
+
   return (
     <div className="flex-1 flex flex-col justify-between min-h-screen relative">
       <Navbar
@@ -87,7 +90,7 @@ export default function HomePage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 w-full flex-1">
         {/* Environmental Telemetry Header (Hidden in Modules Hub) */}
-        {activeTab !== 'modules-hub' && <MetricsGrid metrics={metrics} />}
+        {activeTab !== 'modules-hub' && <MetricsGrid metrics={metrics} selectedLang={selectedLang} />}
 
         {/* Tab 1: Resident Portal (Default Home) */}
         {activeTab === 'resident' && (
@@ -96,13 +99,13 @@ export default function HomePage() {
             <div className="bg-gradient-to-r from-green-800 via-emerald-800 to-teal-900 text-white rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden">
               <div className="relative z-10 max-w-2xl space-y-4">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-semibold border border-white/20 text-green-200">
-                  <Sparkles className="w-4 h-4 text-green-300" /> Integrated Municipal Solution
+                  <Sparkles className="w-4 h-4 text-green-300" /> {t.integratedSolution}
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
-                  Doorstep Waste Segregation, Dynamic Routing & Carbon Tracking
+                  {t.heroTitle}
                 </h2>
                 <p className="text-green-100 text-sm sm:text-base leading-relaxed">
-                  Never miss garbage collection again. Schedule doorstep pickups for recyclable streams, identify segregation bin types with AI, and track municipal sanitation trucks in real-time.
+                  {t.heroSubtitle}
                 </p>
                 <div className="flex flex-wrap gap-3 pt-2">
                   <button
@@ -112,13 +115,13 @@ export default function HomePage() {
                     }}
                     className="bg-white text-green-900 hover:bg-green-50 font-bold px-6 py-3 rounded-2xl text-sm transition shadow-lg flex items-center gap-2 cursor-pointer"
                   >
-                    Schedule Pickup <ArrowRight className="w-4 h-4" />
+                    {t.schedulePickupBtn} <ArrowRight className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => setActiveTab('fleet')}
                     className="bg-green-700/60 hover:bg-green-700 text-white border border-green-400/30 font-semibold px-5 py-3 rounded-2xl text-sm transition backdrop-blur-md cursor-pointer"
                   >
-                    Live Truck Radar
+                    {t.liveTruckRadarBtn}
                   </button>
                 </div>
               </div>
@@ -129,6 +132,7 @@ export default function HomePage() {
               <ServiceBookingForm
                 config={defaultWasteSchedulingConfig}
                 onBookingSubmitted={handleBookingCreated}
+                selectedLang={selectedLang}
               />
               <ClassificationWidget config={wasteTaxonomy} selectedLang={selectedLang} />
             </div>

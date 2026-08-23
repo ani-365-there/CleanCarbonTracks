@@ -4,18 +4,22 @@ import React, { useState } from 'react';
 import { Calendar, User, MapPin, Sparkles, CheckCircle2, AlertCircle, Clock, Info } from 'lucide-react';
 import { ServiceSchedulingConfig, ServiceBookingItem } from '../types';
 import { defaultWasteSchedulingConfig } from '../stateMachine';
+import { getTranslation } from '@/lib/i18n';
 
 interface ServiceBookingFormProps {
   config?: ServiceSchedulingConfig;
   onBookingSubmitted?: (booking: ServiceBookingItem) => void;
   className?: string;
+  selectedLang?: string;
 }
 
 export const ServiceBookingForm: React.FC<ServiceBookingFormProps> = ({
   config = defaultWasteSchedulingConfig,
   onBookingSubmitted,
   className = '',
+  selectedLang = 'en',
 }) => {
+  const t = getTranslation(selectedLang);
   const [formData, setFormData] = useState({
     customerName: '',
     contactAddress: '',
@@ -75,8 +79,8 @@ export const ServiceBookingForm: React.FC<ServiceBookingFormProps> = ({
           <Calendar className="w-6 h-6" />
         </div>
         <div>
-          <h3 className="text-xl font-bold text-gray-900">{config.serviceName}</h3>
-          <p className="text-sm text-gray-500">Fast, verified on-demand doorstep booking</p>
+          <h3 className="text-xl font-bold text-gray-900">{t.bookingTitle}</h3>
+          <p className="text-sm text-gray-500">{t.bookingSubtitle}</p>
         </div>
       </div>
 
@@ -85,9 +89,9 @@ export const ServiceBookingForm: React.FC<ServiceBookingFormProps> = ({
           <div className="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-200">
             <CheckCircle2 className="w-9 h-9" />
           </div>
-          <h4 className="text-2xl font-bold text-green-900 mb-1">Appointment Confirmed!</h4>
+          <h4 className="text-2xl font-bold text-green-900 mb-1">{t.bookingSuccessTitle}</h4>
           <p className="text-sm text-green-700 mb-4">
-            Booking Reference: <span className="font-mono font-bold bg-green-200/70 px-2 py-0.5 rounded text-green-900">{submittedBooking.id}</span>
+            {t.bookingRef} <span className="font-mono font-bold bg-green-200/70 px-2 py-0.5 rounded text-green-900">{submittedBooking.id}</span>
           </p>
 
           <div className="bg-white/80 rounded-xl p-4 text-left text-sm text-gray-700 max-w-md mx-auto space-y-2 border border-green-100 shadow-sm mb-6">

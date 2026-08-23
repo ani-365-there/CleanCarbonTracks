@@ -3,15 +3,19 @@
 import React from 'react';
 import { CalendarCheck, Recycle, CloudRain, Truck, ShieldAlert } from 'lucide-react';
 import { AnalyticsMetrics } from '@/lib/types';
+import { getTranslation } from '@/lib/i18n';
 
 interface MetricsGridProps {
   metrics: AnalyticsMetrics;
+  selectedLang?: string;
 }
 
-export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics }) => {
+export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics, selectedLang = 'en' }) => {
+  const t = getTranslation(selectedLang);
+
   const cards = [
     {
-      title: 'Pickups This Week',
+      title: t.pickupsThisWeek,
       value: metrics.pickupsThisWeek,
       unit: 'Completed',
       icon: CalendarCheck,
@@ -22,9 +26,9 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics }) => {
       change: '+14% vs last week',
     },
     {
-      title: 'Waste Diverted',
+      title: t.wasteDiverted,
       value: `${metrics.wasteDivertedPercentage}%`,
-      unit: 'From Landfills',
+      unit: t.fromLandfills,
       icon: Recycle,
       color: 'from-teal-500 to-cyan-600',
       textColor: 'text-teal-700',
@@ -33,9 +37,9 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics }) => {
       change: 'Target: 80% by Q4',
     },
     {
-      title: 'CO₂ Emissions Saved',
+      title: t.co2Saved,
       value: `${metrics.co2SavedKg} kg`,
-      unit: 'Net Offset',
+      unit: t.netOffset,
       icon: CloudRain,
       color: 'from-blue-500 to-indigo-600',
       textColor: 'text-blue-700',
@@ -44,9 +48,9 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics }) => {
       change: 'Equivalent to 2.1 trees',
     },
     {
-      title: 'Active Smart Fleet',
+      title: t.activeSmartFleet,
       value: metrics.activeVehicles,
-      unit: 'Electric / GPS Trucks',
+      unit: t.electricTrucks,
       icon: Truck,
       color: 'from-amber-500 to-orange-600',
       textColor: 'text-amber-700',
@@ -60,12 +64,12 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics }) => {
     <section className="mb-10">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">City Environmental Pulse</h2>
-          <p className="text-sm text-gray-500">Live telemetry and sustainability indicators</p>
+          <h2 className="text-xl font-bold text-gray-900">{t.pulseTitle}</h2>
+          <p className="text-sm text-gray-500">{t.pulseSubtitle}</p>
         </div>
         <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 border border-green-300">
           <span className="w-2 h-2 mr-1.5 bg-green-500 rounded-full animate-pulse"></span>
-          Live Sync Active
+          {t.liveSync}
         </span>
       </div>
 

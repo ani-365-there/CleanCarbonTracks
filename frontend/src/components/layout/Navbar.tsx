@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Truck, Home, Search, ShieldCheck, MapPin, AlertCircle, Globe } from 'lucide-react';
+import { getTranslation } from '@/lib/i18n';
 
 interface NavbarProps {
   activeTab: string;
@@ -16,13 +17,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   selectedLang = 'en',
   onLanguageChange,
 }) => {
+  const t = getTranslation(selectedLang);
+
   const mainTabs = [
-    { id: 'resident', label: 'Resident Portal', icon: Home },
-    { id: 'categorizer', label: 'Smart Categorizer', icon: Search },
-    { id: 'fleet', label: 'Fleet Radar', icon: MapPin },
-    { id: 'complaints', label: 'Report Issue', icon: AlertCircle },
-    { id: 'admin', label: 'Municipal Admin', icon: ShieldCheck },
-    { id: 'driver', label: 'Driver View', icon: Truck },
+    { id: 'resident', label: t.residentPortal, icon: Home },
+    { id: 'categorizer', label: t.smartCategorizer, icon: Search },
+    { id: 'fleet', label: t.fleetRadar, icon: MapPin },
+    { id: 'complaints', label: t.reportIssue, icon: AlertCircle },
+    { id: 'admin', label: t.municipalAdmin, icon: ShieldCheck },
+    { id: 'driver', label: t.driverView, icon: Truck },
   ];
 
   const languages = [
