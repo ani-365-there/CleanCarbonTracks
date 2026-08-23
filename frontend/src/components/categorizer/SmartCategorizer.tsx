@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Search, Sparkles, AlertCircle, CheckCircle, Flame, Leaf, HelpCircle, ArrowRight } from 'lucide-react';
 import { categorizeItem } from '@/lib/wasteRules';
 import { categorizeWasteItem } from '@/lib/api';
+import { getLocalVernacularTranslation } from '@/lib/vernacular';
 import { WasteItemRule } from '@/lib/types';
 
 interface SmartCategorizerProps {
@@ -33,18 +34,64 @@ export const SmartCategorizer: React.FC<SmartCategorizerProps> = ({ selectedLang
     setLoading(true);
     try {
       const data = await categorizeWasteItem(textToSearch, selectedLang);
+      let categoryText = data.vernacular?.category?.translated_text || data.category;
+      let tipText = data.vernacular?.tip?.translated_text || data.tip;
+      let vernacularData = data.vernacular;
+
+      if (selectedLang !== 'en' && (!vernacularData || !vernacularData.category?.translated_text)) {
+        const localCat = getLocalVernacularTranslation(data.category, selectedLang);
+        const localTip = getLocalVernacularTranslation(data.tip, selectedLang);
+        if (localCat) categoryText = localCat.translatedText;
+        if (localTip) {
+          tipText = localTip.translatedText;
+          vernacularData = {
+            category: localCat ? { translated_text: localCat.translatedText, phonetic_romanized: localCat.phoneticRomanized } : undefined,
+            tip: { translated_text: localTip.translatedText, phonetic_romanized: localTip.phoneticRomanized }
+          };
+        }
+      }
+
       setResult({
         keywords: data.classification?.top?.matched || [],
-        category: data.vernacular?.category?.translated_text || data.category,
+        category: categoryText,
         type: data.type,
         binColor: data.binColor,
-        tip: data.vernacular?.tip?.translated_text || data.tip,
+        tip: tipText,
         co2SavingsKgPerKg: data.co2SavingsKgPerKg,
-        vernacular: data.vernacular,
+        vernacular: vernacularData,
       });
     } catch (err) {
-      const fallback = categorizeItem(textToSearch);
-      setResult(fallback);
+      const fallback = categorizeItem(textToSearch) || {
+        category: 'General Waste / Unclassified',
+        tip: 'ℹ️ Check municipal segregated collection guidelines.',
+        type: 'other' as const,
+        binColor: 'black' as const,
+        co2SavingsKgPerKg: 0.2,
+        keywords: []
+      };
+      let categoryText = fallback.category;
+      let tipText = fallback.tip;
+      let vernacularData: any = undefined;
+
+      if (selectedLang !== 'en') {
+        const localCat = getLocalVernacularTranslation(fallback.category, selectedLang);
+        const localTip = getLocalVernacularTranslation(fallback.tip, selectedLang);
+        if (localCat) categoryText = localCat.translatedText;
+        if (localTip) {
+          tipText = localTip.translatedText;
+          vernacularData = {
+            category: localCat ? { translated_text: localCat.translatedText, phonetic_romanized: localCat.phoneticRomanized } : undefined,
+            tip: { translated_text: localTip.translatedText, phonetic_romanized: localTip.phoneticRomanized }
+          };
+        }
+      }
+
+      setResult({
+        ...fallback,
+        category: categoryText,
+        tip: tipText,
+        vernacular: vernacularData,
+      });
     } finally {
       setLoading(false);
       setHasSearched(true);
