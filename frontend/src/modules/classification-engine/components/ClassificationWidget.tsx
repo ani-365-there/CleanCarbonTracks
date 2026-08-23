@@ -7,6 +7,7 @@ import { ClassificationEngine } from '../classifier';
 import { wasteTaxonomy } from '../defaultTaxonomies';
 
 import { categorizeWasteItem } from '@/lib/api';
+import { getLocalVernacularTranslation } from '@/lib/vernacular';
 
 interface ClassificationWidgetProps {
   config?: TaxonomyConfig;
@@ -33,21 +34,35 @@ export const ClassificationWidget: React.FC<ClassificationWidgetProps> = ({
     if (!queryToSearch.trim()) return;
 
     const match = engine.classify(queryToSearch);
+    let vernacularData: any = null;
     
     try {
       const data = await categorizeWasteItem(queryToSearch, selectedLang);
       if (data.vernacular) {
-        setVernacular(data.vernacular);
-        if (data.vernacular.category?.translated_text) {
-          match.matchedCategory.name = data.vernacular.category.translated_text;
-        }
-        if (data.vernacular.tip?.translated_text) {
-          match.matchedCategory.handlingInstructions = data.vernacular.tip.translated_text;
-        }
-      } else {
-        setVernacular(null);
+        vernacularData = data.vernacular;
       }
     } catch (e) {
+      vernacularData = null;
+    }
+
+    if (selectedLang !== 'en' && (!vernacularData || !vernacularData.category?.translated_text)) {
+      const localCat = getLocalVernacularTranslation(match.matchedCategory.name, selectedLang);
+      const localTip = getLocalVernacularTranslation(match.matchedCategory.handlingInstructions, selectedLang);
+      vernacularData = {
+        category: localCat ? { translated_text: localCat.translatedText, phonetic_romanized: localCat.phoneticRomanized } : undefined,
+        tip: localTip ? { translated_text: localTip.translatedText, phonetic_romanized: localTip.phoneticRomanized } : undefined
+      };
+    }
+
+    if (vernacularData) {
+      setVernacular(vernacularData);
+      if (vernacularData.category?.translated_text) {
+        match.matchedCategory.name = vernacularData.category.translated_text;
+      }
+      if (vernacularData.tip?.translated_text) {
+        match.matchedCategory.handlingInstructions = vernacularData.tip.translated_text;
+      }
+    } else {
       setVernacular(null);
     }
 
