@@ -51,6 +51,13 @@ export const SmartCategorizer: React.FC<SmartCategorizerProps> = ({ selectedLang
     }
   };
 
+  // Automatically re-categorize and translate when user changes language dropdown
+  React.useEffect(() => {
+    if (query.trim() && hasSearched) {
+      handleCategorize(query);
+    }
+  }, [selectedLang]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();

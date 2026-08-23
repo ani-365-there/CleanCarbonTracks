@@ -5,6 +5,7 @@ with phonetic pronunciation and optional TTS speech metadata.
 """
 
 import os
+import re
 import json
 from typing import Dict, Any, List, Optional
 from dotenv import load_dotenv
@@ -24,50 +25,77 @@ SUPPORTED_LANGUAGES: Dict[str, str] = {
     "pa": "Punjabi (ਪੰਜਾਬੀ)"
 }
 
-# Offline dictionary fallback for essential waste & environmental terms
+# Rich offline dictionary for instant translation of waste categories & handling tips
 OFFLINE_DICTIONARY: Dict[str, Dict[str, Any]] = {
     "hi": {
-        "Biodegradable (Organic & Wet Waste)": {"translated": "जैविक (गीला कचरा)", "phonetic": "Jaivik (Geela Kachra)"},
-        "Non-biodegradable / Recyclable (Dry Waste)": {"translated": "गैर-जैविक / पुनर्चक्रण योग्य (सूखा कचरा)", "phonetic": "Gair-jaivik / Punarchakran yogya (Sookha Kachra)"},
-        "Hazardous / Biomedical Waste": {"translated": "खतरनाक / बायोमेडिकल कचरा", "phonetic": "Khatarnak / Biomedical Kachra"},
-        "E-Waste & Electronics": {"translated": "ई-कचरा और इलेक्ट्रॉनिक्स", "phonetic": "E-kachra aur electronics"},
-        "Rinse and flatten bottles or paper before disposal.": {"translated": "निपटान से पहले बोतलों या कागज को धोएं और समतल करें।", "phonetic": "Niptan se pehle botlon ya kagaj ko dhoyen aur samtal karein."},
-        "Ideal for home composting or biogas! Keep sealed in a biodegradable bag.": {"translated": "घरेलू खाद या बायोगैस के लिए आदर्श! बायोडिग्रेडेबल बैग में सील रखें।", "phonetic": "Gharelu khaad ya biogas ke liye aadarsh! Biodegradable bag mein seal rakhein."},
-        "Wrap securely and label as hazardous. Requires specialized handling.": {"translated": "सुरक्षित रूप से लपेटें और खतरनाक के रूप में लेबल करें। विशेष हैंडलिंग की आवश्यकता है।", "phonetic": "Surakshit roop se lapeetein aur khatarnak ke roop mein label karein."},
-        "Deposit at an authorized E-waste collection point.": {"translated": "किसी अधिकृत ई-कचरा संग्रह केंद्र पर जमा करें।", "phonetic": "Kisi adhikrit e-kachra sangrah kendra par jama karein."}
+        "biodegradable (organic & wet waste)": {"translated": "जैविक (गीला कचरा)", "phonetic": "Jaivik (Geela Kachra)"},
+        "non-biodegradable / recyclable (dry waste)": {"translated": "गैर-जैविक / पुनर्चक्रण योग्य (सूखा कचरा)", "phonetic": "Gair-jaivik / Punarchakran yogya (Sookha Kachra)"},
+        "hazardous / biomedical waste": {"translated": "खतरनाक / बायोमेडिकल कचरा", "phonetic": "Khatarnak / Biomedical Kachra"},
+        "e-waste & electronics": {"translated": "ई-कचरा और इलेक्ट्रॉनिक्स", "phonetic": "E-kachra aur electronics"},
+        "general waste / unclassified": {"translated": "सामान्य कचरा / अवर्गीकृत", "phonetic": "Samanya kachra"},
+        "recyclable (metals & alloys)": {"translated": "पुनर्चक्रण योग्य (धातु और मिश्र धातु)", "phonetic": "Punarchakran yogya (Dhatu)"},
+        "recyclable (paper & cardboard)": {"translated": "पुनर्चक्रण योग्य (कागज और कार्डबोर्ड)", "phonetic": "Punarchakran yogya (Kagaj)"},
+        "non-biodegradable (plastic & polymers)": {"translated": "गैर-जैविक (प्लास्टिक और पॉलिमर)", "phonetic": "Gair-jaivik (Plastic)"},
+
+        # Tips
+        "ideal for home composting or biogas! keep sealed in a biodegradable bag.": {
+            "translated": "🌱 घरेलू खाद या बायोगैस के लिए आदर्श! बायोडिग्रेडेबल बैग में बंद रखें।",
+            "phonetic": "Gharelu khaad ya biogas ke liye aadarsh! Biodegradable bag mein band rakhein."
+        },
+        "rinse and flatten bottles or paper before disposal.": {
+            "translated": "♻️ निपटान से पहले बोतलों या कागज को धोएं और समतल करें।",
+            "phonetic": "Niptan se pehle botlon ya kagaj ko dhoyen aur samtal karein."
+        },
+        "wrap securely and label as hazardous. requires specialized handling.": {
+            "translated": "☣️ सुरक्षित रूप से लपेटें और खतरनाक के रूप में लेबल करें। विशेष हैंडलिंग की आवश्यकता है।",
+            "phonetic": "Surakshit roop se lapeetein aur khatarnak ke roop mein label karein."
+        },
+        "deposit at an authorized e-waste collection point.": {
+            "translated": "⚡ किसी अधिकृत ई-कचरा संग्रह केंद्र पर जमा करें।",
+            "phonetic": "Kisi adhikrit e-kachra sangrah kendra par jama karein."
+        },
+        "check municipal segregated collection guidelines.": {
+            "translated": "ℹ️ नगर निगम के पृथक कचरा संग्रह दिशानिर्देशों की जांच करें।",
+            "phonetic": "Nagar nigam ke prithak kachra sangrah dishanirdeshon ki jaanch karein."
+        },
+        "rinse food cans clean and press lid flaps inward to protect sanitation personnel.": {
+            "translated": "⚙️ भोजन के डिब्बे धोकर साफ करें और ढक्कन को अंदर की ओर दबाएं।",
+            "phonetic": "Bhojan ke dibbe dhokar saaf karein aur dhakkan ko andar dabayein."
+        }
     },
     "ta": {
-        "Biodegradable (Organic & Wet Waste)": {"translated": "மக்கும் குப்பை (ஈரக் கழிவு)", "phonetic": "Makkum kuppai (Eera kazhivu)"},
-        "Non-biodegradable / Recyclable (Dry Waste)": {"translated": "மக்காத குப்பை / மறுசுழற்சி (உலர் கழிவு)", "phonetic": "Makkaadha kuppai / Marusuzharchi"},
-        "E-Waste & Electronics": {"translated": "மின்சாரக் கழிவு (இ-வேஸ்ட்)", "phonetic": "Minsara kazhivu (E-waste)"}
+        "biodegradable (organic & wet waste)": {"translated": "மக்கும் குப்பை (ஈரக் கழிவு)", "phonetic": "Makkum kuppai (Eera kazhivu)"},
+        "non-biodegradable / recyclable (dry waste)": {"translated": "மக்காத குப்பை (உலர் கழிவு)", "phonetic": "Makkaadha kuppai (Ular kazhivu)"},
+        "hazardous / biomedical waste": {"translated": "அபாயகரமான கழிவு", "phonetic": "Abhayagaramaana kazhivu"},
+        "e-waste & electronics": {"translated": "மின்சாரக் கழிவு (இ-வேஸ்ட்)", "phonetic": "Minsara kazhivu"}
     },
     "te": {
-        "Biodegradable (Organic & Wet Waste)": {"translated": "జీవ విచ్ఛిన్నమయ్యే (తడి చెత్త)", "phonetic": "Jeeva vichinnamayye (Tadi chetta)"},
-        "Non-biodegradable / Recyclable (Dry Waste)": {"translated": "పొడి చెత్త / రీసైకిల్ వ్యర్థాలు", "phonetic": "Podi chetta / Recycle vyarthalu"}
+        "biodegradable (organic & wet waste)": {"translated": "జీవ విచ్ఛిన్నమయ్యే (తడి చెత్త)", "phonetic": "Jeeva vichinnamayye (Tadi chetta)"},
+        "non-biodegradable / recyclable (dry waste)": {"translated": "పొడి చెత్త (రీసైకిల్ व्यర్థాలు)", "phonetic": "Podi chetta"}
     },
     "kn": {
-        "Biodegradable (Organic & Wet Waste)": {"translated": "ಸಾವಯವ (ಹಸಿ ತ್ಯಾಜ್ಯ)", "phonetic": "Saavayava (Hasi tyaajya)"},
-        "Non-biodegradable / Recyclable (Dry Waste)": {"translated": "ಒಣ ತ್ಯಾಜ್ಯ (ಮರುಬಳಕೆ)", "phonetic": "Ona tyaajya (Marubalake)"}
+        "biodegradable (organic & wet waste)": {"translated": "ಸಾವಯವ (ಹಸಿ ತ್ಯಾಜ್ಯ)", "phonetic": "Saavayava (Hasi tyaajya)"},
+        "non-biodegradable / recyclable (dry waste)": {"translated": "ಒಣ ತ್ಯಾಜ್ಯ (ಮರುಬಳಕೆ)", "phonetic": "Ona tyaajya"}
     },
     "mr": {
-        "Biodegradable (Organic & Wet Waste)": {"translated": "जैविक (ओला कचरा)", "phonetic": "Jaivik (Ola kachra)"},
-        "Non-biodegradable / Recyclable (Dry Waste)": {"translated": "सुका कचरा (पुनर्वापर योग्य)", "phonetic": "Suka kachra (Punarvaapar yogya)"}
+        "biodegradable (organic & wet waste)": {"translated": "जैविक (ओला कचरा)", "phonetic": "Jaivik (Ola kachra)"},
+        "non-biodegradable / recyclable (dry waste)": {"translated": "सुका कचरा (पुनर्वापर योग्य)", "phonetic": "Suka kachra"}
     },
     "bn": {
-        "Biodegradable (Organic & Wet Waste)": {"translated": "পচনশীল (ভেজা বর্জ্য)", "phonetic": "Pochonshil (Bheja borjo)"},
-        "Non-biodegradable / Recyclable (Dry Waste)": {"translated": "অপচনশীল / রিসাইকেলযোগ্য (শুকনো বর্জ্য)", "phonetic": "Opochonshil (Shukno borjo)"}
+        "biodegradable (organic & wet waste)": {"translated": "পচনশীল (ভেজা বর্জ্য)", "phonetic": "Pochonshil (Bheja borjo)"},
+        "non-biodegradable / recyclable (dry waste)": {"translated": "অপচনশীল (শুকনো বর্জ্য)", "phonetic": "Opochonshil"}
     },
     "gu": {
-        "Biodegradable (Organic & Wet Waste)": {"translated": "જૈવિક (ભીનો કચરો)", "phonetic": "Jaivik (Bhino kachro)"},
-        "Non-biodegradable / Recyclable (Dry Waste)": {"translated": "સૂકો કચરો (રિસાયકલ योग्य)", "phonetic": "Suko kachro"}
+        "biodegradable (organic & wet waste)": {"translated": "જૈવિક (ભીનો કચરો)", "phonetic": "Jaivik (Bhino kachro)"},
+        "non-biodegradable / recyclable (dry waste)": {"translated": "સૂકો કચરો (રિસાયકલ)", "phonetic": "Suko kachro"}
     },
     "ml": {
-        "Biodegradable (Organic & Wet Waste)": {"translated": "ജൈവ മാലിന്യം (ഈർപ്പമുള്ള മാലിന്യം)", "phonetic": "Jaiva maalinyam"},
-        "Non-biodegradable / Recyclable (Dry Waste)": {"translated": "അജൈവ മാലിന്യം (ഉണങ്ങിയ മാലിന്യം)", "phonetic": "Ajaiva maalinyam"}
+        "biodegradable (organic & wet waste)": {"translated": "ജൈവ മാലിന്യം (ഈർപ്പമുള്ള)", "phonetic": "Jaiva maalinyam"},
+        "non-biodegradable / recyclable (dry waste)": {"translated": "അജൈവ മാലിന്യം (ഉണങ്ങിയ)", "phonetic": "Ajaiva maalinyam"}
     },
     "pa": {
-        "Biodegradable (Organic & Wet Waste)": {"translated": "ਗਿੱਲਾ ਕੂੜਾ (ਜੈਵਿਕ)", "phonetic": "Gilla kooda (Jaivik)"},
-        "Non-biodegradable / Recyclable (Dry Waste)": {"translated": "ਸੁੱਕਾ ਕੂੜਾ (ਰੀਸਾਈਕਲ ਯੋਗ)", "phonetic": "Sukka kooda"}
+        "biodegradable (organic & wet waste)": {"translated": "ਗਿੱਲਾ ਕੂੜਾ (ਜੈਵਿਕ)", "phonetic": "Gilla kooda"},
+        "non-biodegradable / recyclable (dry waste)": {"translated": "ਸੁੱਕਾ ਕੂੜਾ (ਰੀਸਾਈਕਲ)", "phonetic": "Sukka kooda"}
     }
 }
 
@@ -82,6 +110,11 @@ class VernacularTranslator:
             except Exception as exc:
                 print(f"VernacularTranslator: Groq init skipped: {exc}")
 
+    def _normalize(self, text: str) -> str:
+        # Strip emojis and leading/trailing punctuation/spaces
+        cleaned = re.sub(r'[^\w\s\(\)/&\-]', '', text).strip().lower()
+        return cleaned
+
     def translate_text(self, text: str, target_lang: str) -> Dict[str, Any]:
         target_lang = target_lang.lower().strip()
         if target_lang == "en" or not text or not text.strip():
@@ -95,18 +128,21 @@ class VernacularTranslator:
             }
 
         lang_name = SUPPORTED_LANGUAGES.get(target_lang, "Hindi")
+        norm_key = self._normalize(text)
 
-        # 1. Check offline dictionary
-        if target_lang in OFFLINE_DICTIONARY and text in OFFLINE_DICTIONARY[target_lang]:
-            entry = OFFLINE_DICTIONARY[target_lang][text]
-            return {
-                "source_text": text,
-                "target_language_code": target_lang,
-                "target_language_name": lang_name,
-                "translated_text": entry["translated"],
-                "phonetic_romanized": entry["phonetic"],
-                "engine": "offline_dictionary"
-            }
+        # 1. Check offline dictionary (using normalized key matching)
+        if target_lang in OFFLINE_DICTIONARY:
+            lang_dict = OFFLINE_DICTIONARY[target_lang]
+            for key, entry in lang_dict.items():
+                if key == norm_key or key in norm_key or norm_key in key:
+                    return {
+                        "source_text": text,
+                        "target_language_code": target_lang,
+                        "target_language_name": lang_name,
+                        "translated_text": entry["translated"],
+                        "phonetic_romanized": entry["phonetic"],
+                        "engine": "offline_dictionary"
+                    }
 
         # 2. Try Groq LLM Translation if configured
         if self.groq_client:

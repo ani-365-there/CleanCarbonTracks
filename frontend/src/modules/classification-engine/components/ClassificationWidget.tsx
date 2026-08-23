@@ -56,6 +56,12 @@ export const ClassificationWidget: React.FC<ClassificationWidgetProps> = ({
     if (onClassified) onClassified(match);
   };
 
+  React.useEffect(() => {
+    if (query.trim() && hasSearched) {
+      handleClassify(query);
+    }
+  }, [selectedLang]);
+
   const getBadgeStyle = (color: string) => {
     switch (color) {
       case 'green':
